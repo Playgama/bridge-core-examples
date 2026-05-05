@@ -11,6 +11,7 @@ const TRACKED_EVENTS: EventName[] = [
     'orientation_state_changed',
     'screen_size_changed',
     'platform_message_sent',
+    'default_storage_type_changed',
 ]
 
 export function bindEventsSection(bridge: PlaygamaBridge): void {
@@ -35,6 +36,7 @@ export function bindEventsSection(bridge: PlaygamaBridge): void {
     wire(bridge.device, 'device')
     wire(bridge.advertisement, 'ad')
     wire(bridge.player, 'player')
+    wire(bridge.storage, 'storage')
 
     el<HTMLButtonElement>('events-clear-btn').addEventListener('click', () => {
         log.textContent = ''

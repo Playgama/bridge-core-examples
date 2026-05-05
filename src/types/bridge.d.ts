@@ -10,7 +10,7 @@ declare global {
         | 'y8' | 'lagged' | 'facebook' | 'poki' | 'mock' | 'qa_tool'
         | 'msn' | 'microsoft_store' | 'huawei' | 'bitquest' | 'gamepush'
         | 'discord' | 'jio_games' | 'youtube' | 'portal' | 'reddit'
-        | 'xiaomi' | 'tiktok' | 'dlightek' | 'gamesnacks' | 'samsung'
+        | 'xiaomi' | 'tiktok' | 'dlightek' | 'gamesnacks'
 
     type ModuleName =
         | 'core' | 'platform' | 'player' | 'game' | 'storage'
@@ -24,6 +24,9 @@ declare global {
         | 'visibility_state_changed' | 'audio_state_changed'
         | 'pause_state_changed' | 'orientation_state_changed'
         | 'screen_size_changed' | 'platform_message_sent'
+        | 'default_storage_type_changed'
+
+    type CloudStorageMode = 'none' | 'eager' | 'lazy'
 
     type VisibilityState = 'visible' | 'hidden'
     type InterstitialState = 'loading' | 'opened' | 'closed' | 'failed'
@@ -83,11 +86,9 @@ declare global {
 
     interface StorageModuleApi extends Emitter<EventName> {
         readonly defaultType: StorageType
-        isSupported(type?: StorageType): boolean
-        isAvailable(type?: StorageType): boolean
-        get<T = unknown>(key: string | string[], type?: StorageType, tryParseJson?: boolean): Promise<T>
-        set(key: string | string[], value: unknown | unknown[], type?: StorageType): Promise<void>
-        delete(key: string | string[], type?: StorageType): Promise<void>
+        get<T = unknown>(key: string | string[], tryParseJson?: boolean): Promise<T>
+        set(key: string | string[], value: unknown | unknown[]): Promise<void>
+        delete(key: string | string[]): Promise<void>
     }
 
     interface AdvertisementModuleApi extends Emitter<EventName> {

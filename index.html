@@ -154,17 +154,17 @@ ACHIEVEMENT</span>
                 <h2 class="module__title">Storage</h2>
                 <div class="kv">
                     <div class="kv__row"><span class="kv__key">Default Type:</span><span class="kv__val" id="storage-default-type">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Local Storage (supported / available):</span><span class="kv__val" id="storage-ls">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Platform Internal (supported / available):</span><span class="kv__val" id="storage-pi">?</span></div>
+                    <div class="kv__row"><span class="kv__key">Default Type Changes:</span><span class="kv__val" id="storage-default-type-log">—</span></div>
                 </div>
+                <p class="muted">v2 — <code>storageType</code> arg removed from <code>get/set/delete</code>; routing uses platform's <code>defaultStorageType</code> + <code>cloudStorageMode</code>.</p>
                 <div class="subhead">Data</div>
                 <div class="row">
-                    <select id="storage-type">
-                        <option value="local_storage">local_storage</option>
-                        <option value="platform_internal">platform_internal</option>
-                    </select>
                     <input type="text" id="storage-key-coins" placeholder="coins" />
                     <input type="text" id="storage-key-level" placeholder="level" />
+                    <label style="display: flex; align-items: center; gap: 6px; color: var(--muted-2)">
+                        <input type="checkbox" id="storage-try-parse-json" checked />
+                        tryParseJson
+                    </label>
                 </div>
                 <div class="actions">
                     <button class="action" id="storage-get-btn">
