@@ -163,8 +163,15 @@ ACHIEVEMENT</span>
                         <option value="local_storage">local_storage</option>
                         <option value="platform_internal">platform_internal</option>
                     </select>
-                    <input type="text" id="storage-key-coins" placeholder="coins" />
-                    <input type="text" id="storage-key-level" placeholder="level" />
+                    <label class="storage-toggle">
+                        <input type="checkbox" id="storage-try-parse-json" checked />
+                        <span>tryParseJson on GET</span>
+                    </label>
+                </div>
+                <div id="storage-rows" class="storage-rows"></div>
+                <div class="row">
+                    <button class="btn btn--ghost" id="storage-add-row-btn" type="button">+ ADD ROW</button>
+                    <span class="muted">value: raw string, or JSON (object / array / number / bool / null)</span>
                 </div>
                 <div class="actions">
                     <button class="action" id="storage-get-btn">

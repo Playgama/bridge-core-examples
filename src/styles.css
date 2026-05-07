@@ -315,6 +315,63 @@ select:focus {
 .status.ok { color: var(--c-game); }
 .status.err { color: var(--c-leaderboards); }
 
+.storage-rows {
+    display: grid;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.storage-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 1fr) minmax(0, 3fr) auto;
+    gap: 8px;
+    align-items: center;
+}
+
+.storage-row input {
+    width: 100%;
+}
+
+.storage-row__remove {
+    background: var(--card-2);
+    color: var(--muted-2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: color 120ms ease, border-color 120ms ease;
+}
+
+.storage-row__remove:hover {
+    color: var(--c-leaderboards);
+    border-color: rgba(248, 113, 113, 0.4);
+}
+
+.storage-row__remove:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+.storage-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted-2);
+    cursor: pointer;
+    user-select: none;
+}
+
+.storage-toggle input {
+    accent-color: var(--c-storage);
+    width: auto;
+    margin: 0;
+    padding: 0;
+}
+
 .output {
     background: var(--card-2);
     border: 1px solid var(--line);
