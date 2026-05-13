@@ -33,7 +33,6 @@ declare global {
     type RewardedState = 'loading' | 'opened' | 'closed' | 'failed' | 'rewarded'
     type BannerState = 'loading' | 'shown' | 'hidden' | 'failed'
     type BannerPosition = 'top' | 'bottom'
-    type StorageType = 'local_storage' | 'platform_internal'
     type DeviceType = 'desktop' | 'mobile' | 'tablet' | 'tv'
     type DeviceOs = 'windows' | 'macos' | 'linux' | 'android' | 'ios' | 'other'
     type DeviceOrientation = 'portrait' | 'landscape'
@@ -85,7 +84,6 @@ declare global {
     }
 
     interface StorageModuleApi extends Emitter<EventName> {
-        readonly defaultType: StorageType
         get<T = unknown>(key: string | string[], tryParseJson?: boolean): Promise<T>
         set(key: string | string[], value: unknown | unknown[]): Promise<void>
         delete(key: string | string[]): Promise<void>
@@ -225,7 +223,6 @@ declare global {
         readonly INTERSTITIAL_STATE: Record<string, InterstitialState>
         readonly REWARDED_STATE: Record<string, RewardedState>
         readonly BANNER_STATE: Record<string, BannerState>
-        readonly STORAGE_TYPE: Record<string, StorageType>
         readonly VISIBILITY_STATE: Record<string, VisibilityState>
         readonly DEVICE_TYPE: Record<string, DeviceType>
         readonly DEVICE_ORIENTATION: Record<string, DeviceOrientation>

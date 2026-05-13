@@ -1,4 +1,4 @@
-import { appendLog, el, formatValue, parseJsonLoose, pretty, setText } from '../util'
+import { el, formatValue, parseJsonLoose, pretty } from '../util'
 
 interface Row {
     keyEl: HTMLInputElement
@@ -8,22 +8,12 @@ interface Row {
 
 export function bindStorageSection(bridge: PlaygamaBridge): void {
     const s = bridge.storage
-    setText('storage-default-type', s.defaultType)
 
     const out = el('storage-output')
-    const log = el('storage-default-type-log')
-    log.textContent = ''
 
     const tryParseEl = el<HTMLInputElement>('storage-try-parse-json')
     const rowsRoot = el<HTMLDivElement>('storage-rows')
     const rows: Row[] = []
-
-    if (typeof s.on === 'function') {
-        s.on('default_storage_type_changed', () => {
-            setText('storage-default-type', s.defaultType)
-            appendLog(log, `→ ${s.defaultType}`)
-        })
-    }
 
     const updateRemoveButtons = (): void => {
         const onlyOne = rows.length <= 1
