@@ -31,8 +31,9 @@
                     <div class="kv__row"><span class="kv__key">TLD:</span><span class="kv__val" id="platform-tld">?</span></div>
                     <div class="kv__row"><span class="kv__key">Is Audio Enabled:</span><span class="kv__val" id="platform-audio">?</span></div>
                     <div class="kv__row"><span class="kv__key">Is Paused:</span><span class="kv__val" id="platform-paused">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Is Get All Games Supported:</span><span class="kv__val" id="platform-getall-supported">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Is Get Game By Id Supported:</span><span class="kv__val" id="platform-getbyid-supported">?</span></div>
+                    <div class="kv__row"><span class="kv__key">Launch Source:</span><span class="kv__val" id="platform-launch-source">?</span></div>
+                    <div class="kv__row"><span class="kv__key">External Calls Supported:</span><span class="kv__val" id="platform-external-calls">?</span></div>
+                    <div class="kv__row"><span class="kv__key">External Links Allowed:</span><span class="kv__val" id="platform-external-links">?</span></div>
                 </div>
 
                 <div class="subhead">Send Message</div>
@@ -110,13 +111,6 @@ ACHIEVEMENT</span>
                     <span class="kv__val" id="platform-server-time">Not requested</span>
                 </div>
 
-                <div class="subhead">Games Catalog</div>
-                <div class="row">
-                    <button class="btn" id="platform-get-all-games-btn">Get All Games</button>
-                    <input type="text" id="platform-game-id" placeholder="game id" />
-                    <button class="btn" id="platform-get-game-by-id-btn">Get Game By Id</button>
-                </div>
-                <pre id="platform-games-output" class="output"></pre>
             </section>
 
             <!-- ============ DEVICE ============ -->
@@ -137,16 +131,12 @@ ACHIEVEMENT</span>
             <!-- ============ GAME ============ -->
             <section class="module module--game" id="game-section">
                 <h2 class="module__title">Game</h2>
-                <div class="kv">
-                    <div class="kv__row"><span class="kv__key">Visibility State:</span><span class="kv__val" id="game-visibility">?</span></div>
-                </div>
+                <p class="muted">v2 — <code>bridge.game</code> module removed; loading progress now lives on the top-level <code>bridge.setGameLoadingProgress()</code>; pause state via <code>bridge.platform.isPaused</code> + <code>bridge.on('pause_state_changed', …)</code>.</p>
                 <div class="subhead">Set Loading Progress</div>
                 <div class="row">
                     <input type="number" id="game-progress-input" placeholder="0–100" min="0" max="100" />
                     <button class="btn" id="game-progress-btn">Set Progress</button>
                 </div>
-                <div class="subhead">Visibility Transitions</div>
-                <pre id="game-visibility-log" class="output"></pre>
             </section>
 
             <!-- ============ STORAGE ============ -->
@@ -311,7 +301,6 @@ ADVANCED</span>
                     <div class="kv__row"><span class="kv__key">Add To Home Screen:</span><span class="kv__val" id="social-home-supported">?</span><span class="kv__key">· reward:</span><span class="kv__val" id="social-home-reward-supported">?</span></div>
                     <div class="kv__row"><span class="kv__key">Add To Favorites:</span><span class="kv__val" id="social-fav-supported">?</span><span class="kv__key">· reward:</span><span class="kv__val" id="social-fav-reward-supported">?</span></div>
                     <div class="kv__row"><span class="kv__key">Rate:</span><span class="kv__val" id="social-rate-supported">?</span></div>
-                    <div class="kv__row"><span class="kv__key">External Links Allowed:</span><span class="kv__val" id="social-external-links">?</span></div>
                 </div>
 
                 <div class="subhead">Share / Invite / Community</div>
@@ -442,26 +431,16 @@ PURCHASE</span>
             <!-- ============ ACHIEVEMENTS ============ -->
             <section class="module module--achievements" id="achievements-section">
                 <h2 class="module__title">Achievements</h2>
-                <div class="kv">
-                    <div class="kv__row"><span class="kv__key">Is Supported:</span><span class="kv__val" id="ach-supported">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Is Get List Supported:</span><span class="kv__val" id="ach-list-supported">?</span></div>
-                    <div class="kv__row"><span class="kv__key">Is Native Popup Supported:</span><span class="kv__val" id="ach-popup-supported">?</span></div>
-                </div>
+                <p class="muted">v2 — <code>unlock(id: string)</code> and <code>getAchievements()</code>; the <code>isSupported</code>/<code>isGetListSupported</code>/<code>isNativePopupSupported</code> flags and <code>showNativePopup</code> were removed.</p>
                 <div class="subhead">Inputs</div>
                 <div class="row">
-                    <input type="text" id="ach-id" placeholder="achievement id / key" />
-                    <input type="text" id="ach-name" placeholder="achievement name" />
+                    <input type="text" id="ach-id" placeholder="achievement id" />
                 </div>
                 <div class="actions">
                     <button class="action" id="ach-list-btn">
                         <span class="action__icon">📋</span>
                         <span class="action__label">GET
-LIST</span>
-                    </button>
-                    <button class="action" id="ach-popup-btn">
-                        <span class="action__icon">🏆</span>
-                        <span class="action__label">SHOW NATIVE
-POPUP</span>
+ACHIEVEMENTS</span>
                     </button>
                     <button class="action" id="ach-unlock-btn">
                         <span class="action__icon">🔓</span>
@@ -477,9 +456,13 @@ POPUP</span>
                 <div class="kv">
                     <div class="kv__row"><span class="kv__key">Is Supported:</span><span class="kv__val" id="rc-supported">?</span></div>
                 </div>
+                <div class="subhead">Set Context</div>
+                <div class="row">
+                    <input type="text" id="rc-context" placeholder='{"level":5}' />
+                    <button class="btn" id="rc-set-context-btn">Set Context</button>
+                </div>
                 <div class="subhead">Get</div>
                 <div class="row">
-                    <input type="text" id="rc-options" placeholder="options JSON (optional)" />
                     <button class="btn" id="rc-get-btn">Get Config</button>
                 </div>
                 <pre id="rc-output" class="output"></pre>

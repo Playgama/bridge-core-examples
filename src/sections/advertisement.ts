@@ -19,20 +19,20 @@ export function bindAdvertisementSection(bridge: PlaygamaBridge): void {
 
     const log = el('ad-event-log')
 
-    a.on('banner_state_changed', (state: BannerState) => {
+    bridge.on('banner_state_changed', (state: BannerState) => {
         setText('ad-banner-state', state)
         appendLog(log, `banner → ${state}`)
     })
-    a.on('interstitial_state_changed', (state: InterstitialState) => {
+    bridge.on('interstitial_state_changed', (state: InterstitialState) => {
         setText('ad-interstitial-state', state)
         appendLog(log, `interstitial → ${state}`)
     })
-    a.on('rewarded_state_changed', (state: RewardedState) => {
+    bridge.on('rewarded_state_changed', (state: RewardedState) => {
         setText('ad-rewarded-state', state)
         setText('ad-rewarded-placement', a.rewardedPlacement)
         appendLog(log, `rewarded → ${state}`)
     })
-    a.on('advanced_banners_state_changed', (state: unknown) => {
+    bridge.on('advanced_banners_state_changed', (state: unknown) => {
         appendLog(log, `advanced → ${JSON.stringify(state)}`)
     })
 

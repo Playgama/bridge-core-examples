@@ -87,7 +87,7 @@ export function bindStorageSection(bridge: PlaygamaBridge): void {
             return
         }
         try {
-            const data = await s.get<unknown[]>(keys, tryParseEl.checked)
+            const data = await s.get(keys, tryParseEl.checked)
             const arr = Array.isArray(data) ? data : [data]
             keys.forEach((key, i) => {
                 const value = arr[i]

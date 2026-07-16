@@ -1,19 +1,15 @@
-import { appendLog, el, setText } from '../util'
+import { el } from '../util'
 
+// The v2 SDK removed the standalone `game` module. The one method that
+// mattered — reporting in-game loading progress — moved to the top-level
+// `bridge.setGameLoadingProgress`. Visibility/pause state moved to
+// `bridge.platform.isPaused` + `bridge.on('pause_state_changed', ...)`.
 export function bindGameSection(bridge: PlaygamaBridge): void {
-    const log = el('game-visibility-log')
-    setText('game-visibility', bridge.game.visibilityState)
-
-    bridge.game.on('visibility_state_changed', (state: VisibilityState) => {
-        setText('game-visibility', state)
-        appendLog(log, `→ ${state}`)
-    })
-
     el<HTMLButtonElement>('game-progress-btn').addEventListener('click', () => {
         const raw = el<HTMLInputElement>('game-progress-input').value
         const percent = Number(raw)
         if (Number.isFinite(percent)) {
-            bridge.game.setLoadingProgress(percent)
+            bridge.setGameLoadingProgress(percent)
         }
     })
 }

@@ -11,7 +11,6 @@ export function bindSocialSection(bridge: PlaygamaBridge): void {
     setText('social-fav-supported', s.isAddToFavoritesSupported)
     setText('social-fav-reward-supported', s.isAddToFavoritesRewardSupported)
     setText('social-rate-supported', s.isRateSupported)
-    setText('social-external-links', s.isExternalLinksAllowed)
 
     const out = el('social-output')
     const wrap = async (label: string, fn: () => Promise<unknown>): Promise<void> => {

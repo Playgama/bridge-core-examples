@@ -1,34 +1,33 @@
 // Type declarations for the Playgama Bridge global (`window.bridge`).
-// Mirrors the public surface of `playgama/bridge` v1.30.x.
+// Mirrors the public surface of `playgama/bridge` v2.0.0 (main branch).
 
 export {}
 
 declare global {
     type PlatformId =
-        | 'vk' | 'ok' | 'yandex' | 'crazy_games' | 'absolute_games'
-        | 'game_distribution' | 'playgama' | 'playdeck' | 'telegram'
+        | 'vk' | 'ok' | 'yandex' | 'crazy_games'
+        | 'game_distribution' | 'playgama' | 'standalone' | 'playdeck' | 'telegram'
         | 'y8' | 'lagged' | 'facebook' | 'poki' | 'mock' | 'qa_tool'
-        | 'msn' | 'microsoft_store' | 'huawei' | 'bitquest' | 'gamepush'
+        | 'msn' | 'microsoft_store' | 'huawei' | 'gamepush'
         | 'discord' | 'jio_games' | 'youtube' | 'portal' | 'reddit'
-        | 'xiaomi' | 'tiktok' | 'dlightek' | 'gamesnacks'
+        | 'xiaomi' | 'tiktok' | 'dlightek' | 'gamesnacks' | 'samsung'
 
     type ModuleName =
-        | 'core' | 'platform' | 'player' | 'game' | 'storage'
+        | 'core' | 'platform' | 'player' | 'storage'
         | 'advertisement' | 'social' | 'device' | 'leaderboards'
         | 'payments' | 'remote_config' | 'clipboard' | 'achievements'
-        | 'analytics' | 'recorder'
+        | 'analytics' | 'daily_rewards' | 'tasks' | 'cross_promo'
 
     type EventName =
         | 'interstitial_state_changed' | 'rewarded_state_changed'
         | 'banner_state_changed' | 'advanced_banners_state_changed'
-        | 'visibility_state_changed' | 'audio_state_changed'
+        | 'audio_state_changed'
         | 'pause_state_changed' | 'orientation_state_changed'
         | 'screen_size_changed' | 'platform_message_sent'
-        | 'default_storage_type_changed'
+        | 'platform_storage_availability_changed'
 
-    type CloudStorageMode = 'none' | 'eager' | 'lazy'
+    type LaunchSource = 'launcher' | 'notification' | 'unknown'
 
-    type VisibilityState = 'visible' | 'hidden'
     type InterstitialState = 'loading' | 'opened' | 'closed' | 'failed'
     type RewardedState = 'loading' | 'opened' | 'closed' | 'failed' | 'rewarded'
     type BannerState = 'loading' | 'shown' | 'hidden' | 'failed'
@@ -51,45 +50,40 @@ declare global {
         emit(event: E, ...args: unknown[]): void
     }
 
-    interface PlatformModuleApi extends Emitter<EventName> {
+    interface PlatformModuleApi {
         readonly id: PlatformId
         readonly sdk: unknown
         readonly language: string
         readonly payload: string | null
         readonly tld: string | null
+        readonly launchSource: LaunchSource | null
+        readonly isExternalCallsSupported: boolean
+        readonly isExternalLinksAllowed: boolean
         readonly isAudioEnabled: boolean
         readonly isPaused: boolean
-        readonly isGetAllGamesSupported: boolean
-        readonly isGetGameByIdSupported: boolean
-        sendMessage(message: PlatformMessage | string, options?: Record<string, unknown>): Promise<void>
+        sendMessage(message: PlatformMessage | string, options?: Record<string, unknown>): Promise<unknown>
         sendCustomMessage(id: string, options?: Record<string, unknown>): Promise<unknown>
-        getServerTime(): Promise<number>
-        getAllGames(): Promise<unknown>
-        getGameById(options: string | Record<string, unknown>): Promise<unknown>
+        getServerTime(): Promise<unknown>
     }
 
-    interface PlayerModuleApi extends Emitter<EventName> {
+    interface PlayerModuleApi {
         readonly isAuthorizationSupported: boolean
         readonly isAuthorized: boolean
+        readonly isGuest: boolean
         readonly id: string | null
         readonly name: string | null
         readonly photos: string[]
         readonly extra: Record<string, unknown> | null
-        authorize(options?: Record<string, unknown>): Promise<void>
+        authorize(options?: Record<string, unknown>): Promise<unknown>
     }
 
-    interface GameModuleApi extends Emitter<EventName> {
-        readonly visibilityState: VisibilityState
-        setLoadingProgress(percent: number, isFallback?: boolean): void
-    }
-
-    interface StorageModuleApi extends Emitter<EventName> {
-        get<T = unknown>(key: string | string[], tryParseJson?: boolean): Promise<T>
+    interface StorageModuleApi {
+        get(key: string | string[], tryParseJson?: boolean): Promise<unknown>
         set(key: string | string[], value: unknown | unknown[]): Promise<void>
         delete(key: string | string[]): Promise<void>
     }
 
-    interface AdvertisementModuleApi extends Emitter<EventName> {
+    interface AdvertisementModuleApi {
         readonly isBannerSupported: boolean
         readonly isInterstitialSupported: boolean
         readonly isRewardedSupported: boolean
@@ -109,10 +103,10 @@ declare global {
         showRewarded(placement?: string | null): void
         showAdvancedBanners(placement: string): void
         hideAdvancedBanners(): void
-        checkAdBlock(): Promise<boolean>
+        checkAdBlock(): Promise<unknown>
     }
 
-    interface SocialModuleApi extends Emitter<EventName> {
+    interface SocialModuleApi {
         readonly isShareSupported: boolean
         readonly isInviteFriendsSupported: boolean
         readonly isJoinCommunitySupported: boolean
@@ -122,16 +116,15 @@ declare global {
         readonly isAddToFavoritesSupported: boolean
         readonly isAddToFavoritesRewardSupported: boolean
         readonly isRateSupported: boolean
-        readonly isExternalLinksAllowed: boolean
-        share(options: Record<string, unknown>): Promise<void>
-        inviteFriends(options?: Record<string, unknown>): Promise<void>
-        joinCommunity(options?: Record<string, unknown>): Promise<void>
-        createPost(options: Record<string, unknown>): Promise<void>
-        addToHomeScreen(): Promise<void>
+        share(options?: Record<string, unknown>): Promise<unknown>
+        inviteFriends(options?: Record<string, unknown>): Promise<unknown>
+        joinCommunity(options?: Record<string, unknown>): Promise<unknown>
+        createPost(options?: Record<string, unknown>): Promise<unknown>
+        addToHomeScreen(): Promise<unknown>
         getAddToHomeScreenReward(): Promise<unknown>
-        addToFavorites(): Promise<void>
+        addToFavorites(): Promise<unknown>
         getAddToFavoritesReward(): Promise<unknown>
-        rate(): Promise<void>
+        rate(): Promise<unknown>
     }
 
     interface DeviceSafeArea {
@@ -141,10 +134,10 @@ declare global {
         right: number
     }
 
-    interface DeviceModuleApi extends Emitter<EventName> {
+    interface DeviceModuleApi {
         readonly type: DeviceType
         readonly os: DeviceOs
-        readonly orientation: DeviceOrientation
+        readonly orientation: DeviceOrientation | null
         readonly safeArea: DeviceSafeArea
     }
 
@@ -156,14 +149,14 @@ declare global {
         photo?: string
     }
 
-    interface LeaderboardsModuleApi extends Emitter<EventName> {
+    interface LeaderboardsModuleApi {
         readonly type: LeaderboardType
-        setScore(id: string, score: number | string): Promise<void>
+        setScore(id: string, score: number | string): Promise<unknown>
         getEntries(id: string): Promise<LeaderboardEntry[]>
-        showNativePopup(id: string): Promise<void>
+        showNativePopup(id: string): Promise<unknown>
     }
 
-    interface PaymentsModuleApi extends Emitter<EventName> {
+    interface PaymentsModuleApi {
         readonly isSupported: boolean
         purchase(id: string, options?: Record<string, unknown>): Promise<unknown>
         getPurchases(): Promise<unknown[]>
@@ -171,21 +164,18 @@ declare global {
         consumePurchase(id: string): Promise<unknown>
     }
 
-    interface AchievementsModuleApi extends Emitter<EventName> {
-        readonly isSupported: boolean
-        readonly isGetListSupported: boolean
-        readonly isNativePopupSupported: boolean
-        unlock(options?: Record<string, unknown>): Promise<unknown>
-        getList(options?: Record<string, unknown>): Promise<unknown[]>
-        showNativePopup(options?: Record<string, unknown>): Promise<void>
+    interface AchievementsModuleApi {
+        unlock(id: string): Promise<unknown>
+        getAchievements(): Promise<unknown[]>
     }
 
-    interface RemoteConfigModuleApi extends Emitter<EventName> {
+    interface RemoteConfigModuleApi {
         readonly isSupported: boolean
-        get(options?: Record<string, unknown>): Promise<Record<string, unknown>>
+        setContext(parameters: Record<string, unknown>): void
+        get(): Promise<Record<string, unknown>>
     }
 
-    interface ClipboardModuleApi extends Emitter<EventName> {
+    interface ClipboardModuleApi {
         readonly isSupported: boolean
         read(): Promise<string>
         write(text: string): Promise<void>
@@ -195,26 +185,48 @@ declare global {
         send(eventType: string, data?: Record<string, unknown>): void
     }
 
+    // New v2 modules — surfaced but bench doesn't yet drive them.
+    interface CrossPromoModuleApi {
+        readonly isVisible: boolean
+        getGames(): Promise<unknown[]>
+        show(): Promise<void>
+        hide(): void
+    }
+
+    interface DailyRewardsModuleApi {
+        getRewards(): Promise<unknown[]>
+        getCurrentDay(): Promise<unknown>
+        getCurrentReward(): Promise<unknown>
+        claimCurrentReward(): Promise<unknown>
+    }
+
+    interface TasksModuleApi {
+        getTasks(): Promise<unknown[]>
+        addProgress(options: Record<string, unknown>): Promise<unknown>
+        claimReward(options: Record<string, unknown>): Promise<unknown>
+    }
+
     interface PlaygamaBridge extends Emitter<EventName> {
         readonly version: string
         readonly isInitialized: boolean
         readonly options: Record<string, unknown>
-        engine: string
+        readonly engine: string
 
         readonly platform: PlatformModuleApi
         readonly player: PlayerModuleApi
-        readonly game: GameModuleApi
         readonly storage: StorageModuleApi
         readonly advertisement: AdvertisementModuleApi
         readonly social: SocialModuleApi
         readonly device: DeviceModuleApi
-        readonly leaderboard: LeaderboardsModuleApi
         readonly leaderboards: LeaderboardsModuleApi
         readonly payments: PaymentsModuleApi
         readonly achievements: AchievementsModuleApi
         readonly remoteConfig: RemoteConfigModuleApi
         readonly clipboard: ClipboardModuleApi
         readonly analytics: AnalyticsModuleApi
+        readonly crossPromo: CrossPromoModuleApi
+        readonly dailyRewards: DailyRewardsModuleApi
+        readonly tasks: TasksModuleApi
 
         readonly PLATFORM_ID: Record<string, PlatformId>
         readonly PLATFORM_MESSAGE: Record<string, PlatformMessage>
@@ -223,11 +235,12 @@ declare global {
         readonly INTERSTITIAL_STATE: Record<string, InterstitialState>
         readonly REWARDED_STATE: Record<string, RewardedState>
         readonly BANNER_STATE: Record<string, BannerState>
-        readonly VISIBILITY_STATE: Record<string, VisibilityState>
         readonly DEVICE_TYPE: Record<string, DeviceType>
         readonly DEVICE_ORIENTATION: Record<string, DeviceOrientation>
+        readonly LAUNCH_SOURCE: Record<string, LaunchSource>
 
         initialize(options?: { configFilePath?: string } & Record<string, unknown>): Promise<void>
+        setGameLoadingProgress(percent: number): void
     }
 
     interface Window {

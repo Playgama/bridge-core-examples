@@ -12,12 +12,12 @@ export function bindDeviceSection(bridge: PlaygamaBridge): void {
     const orientationLog = el('device-orientation-log')
     const screenLog = el('device-screen-log')
 
-    bridge.device.on('orientation_state_changed', (orientation: DeviceOrientation) => {
+    bridge.on('orientation_state_changed', (orientation: DeviceOrientation) => {
         appendLog(orientationLog, `→ ${orientation}`)
         refresh()
     })
 
-    bridge.device.on('screen_size_changed', (size: unknown) => {
+    bridge.on('screen_size_changed', (size: unknown) => {
         appendLog(screenLog, `→ ${pretty(size)}`)
         refresh()
     })

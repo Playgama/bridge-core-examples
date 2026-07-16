@@ -7,10 +7,11 @@ export function bindPlatformSection(bridge: PlaygamaBridge): void {
     setText('platform-language', p.language)
     setText('platform-payload', p.payload)
     setText('platform-tld', p.tld)
+    setText('platform-launch-source', p.launchSource)
     setText('platform-audio', p.isAudioEnabled)
     setText('platform-paused', p.isPaused)
-    setText('platform-getall-supported', p.isGetAllGamesSupported)
-    setText('platform-getbyid-supported', p.isGetGameByIdSupported)
+    setText('platform-external-calls', p.isExternalCallsSupported)
+    setText('platform-external-links', p.isExternalLinksAllowed)
 
     document.querySelectorAll<HTMLButtonElement>('#platform-section .action[data-message]').forEach((btn) => {
         btn.addEventListener('click', async () => {
@@ -43,25 +44,6 @@ export function bindPlatformSection(bridge: PlaygamaBridge): void {
             setStatus('platform-send-message-status', `custom ok: ${pretty(result)}`, 'ok')
         } catch (error) {
             setStatus('platform-send-message-status', `custom failed: ${(error as Error).message ?? error}`, 'err')
-        }
-    })
-
-    el<HTMLButtonElement>('platform-get-all-games-btn').addEventListener('click', async () => {
-        const out = el('platform-games-output')
-        try {
-            out.textContent = pretty(await p.getAllGames())
-        } catch (error) {
-            out.textContent = `failed: ${(error as Error).message ?? error}`
-        }
-    })
-
-    el<HTMLButtonElement>('platform-get-game-by-id-btn').addEventListener('click', async () => {
-        const id = el<HTMLInputElement>('platform-game-id').value
-        const out = el('platform-games-output')
-        try {
-            out.textContent = pretty(await p.getGameById(id))
-        } catch (error) {
-            out.textContent = `failed: ${(error as Error).message ?? error}`
         }
     })
 }
